@@ -45,9 +45,40 @@ mcp dev server.py
    pip install -r requirements.txt
    ```
 
+## Docker
+
+You can also run the MCP server using Docker. This is useful for keeping your environment clean or for deployment.
+
+### Build and Run
+
+1. **Build the image**
+   ```bash
+   docker build -t wb-mcp-server .
+   ```
+
+2. **Run the container**
+   ```bash
+   docker run -i --rm wb-mcp-server
+   ```
+   *The `-i` flag is crucial for MCP to work over Stdio.*
+
+### Docker Composition
+
+You can use `docker-compose` to run the server:
+```bash
+docker-compose up
+```
+
 ## Configuration
 
 Configure your LLM client to use the MCP server.
+
+### Client Config (Docker)
+
+If you prefer using the Docker container directly in your client:
+
+- **Command**: `docker`
+- **Args**: `run`, `-i`, `--rm`, `wb-mcp-server`
 
 ### Cherry Studio 🍒
 
