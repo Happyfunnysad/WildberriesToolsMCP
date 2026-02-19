@@ -1,72 +1,98 @@
 # WB Smart Review — MCP Server
 
-MCP сервер для получения отзывов товаров с Wildberries. Предназначен для использования с LLM-клиентами (Cherry Studio, Claude Desktop, Cursor), которые могут анализировать полученные данные.
+> MCP server for retrieving Wildberries product reviews, designed for seamless integration with LLM clients like Cherry Studio, Claude Desktop, and Cursor.
 
-## Инструменты (Tools)
+## Features
 
-| Инструмент | Описание |
-|------------|----------|
-| `get_wb_reviews` | Получить отзывы товара по ссылке или артикулу |
+- ✨ **Easy Integration**: Works out-of-the-box with standard MCP clients.
+- 🚀 **Smart Scraping**: Automatically determines the correct "basket" host for any Wildberries SKU.
+- 🔧 **LLM Ready**: Formats reviews as JSON for easy analysis by Large Language Models.
+- 📊 **Rich Data**: Provides product name, total review count, and raw review texts (up to 500).
 
-## Установка
+## Quick Start
 
-1. Склонируйте репозиторий:
+```bash
+# Install dependencies
+pip install -r requirements.txt
+
+# Start the MCP server in development mode
+mcp dev server.py
+```
+
+## Installation
+
+### Prerequisites
+
+- Python 3.10 or higher
+- `pip` package manager
+
+### Development Setup
+
+1. **Clone the repository**
    ```bash
    git clone https://github.com/Start-Python-w/wb_smart_remaster.git
    cd wb_smart_remaster
    ```
 
-2. Создайте виртуальное окружение (Python 3.10+):
+2. **Create a virtual environment**
    ```bash
    python3 -m venv .venv
-   source .venv/bin/activate
+   source .venv/bin/activate  # On Windows use: .venv\Scripts\activate
    ```
 
-3. Установите зависимости:
+3. **Install dependencies**
    ```bash
    pip install -r requirements.txt
    ```
 
-## Запуск (Development)
+## Configuration
 
-```bash
-mcp dev server.py
-```
+Configure your LLM client to use the MCP server.
 
-Откроется MCP Inspector, где можно протестировать работу сервера.
+### Cherry Studio 🍒
 
-## Конфигурация клиента (Client Config)
-
-### Вариант 1: Cherry Studio 🍒
-
-1. Откройте **Settings** → **MCP Servers**.
-2. Нажмите **Add**.
-3. Настройте подключение (Type: Stdio):
+1. Go to **Settings** → **MCP Servers**.
+2. Click **Add**.
+3. Configure as **Stdio**:
    - **Name**: `WB Analyzer`
-   - **Command**: `/path/to/your/project/.venv/bin/python` (полный путь к python в venv)
-   - **Args**: `/path/to/your/project/server.py` (полный путь к файлу сервера)
-4. Нажмите **Save**.
+   - **Command**: `/absolute/path/to/project/.venv/bin/python`
+   - **Args**: `/absolute/path/to/project/server.py`
+4. Click **Save**.
 
-### Вариант 2: Claude Desktop
+### Claude Desktop
 
-Добавьте в `claude_desktop_config.json`:
+Add the following to your `claude_desktop_config.json`:
 
 ```json
 {
   "mcpServers": {
     "wb-analyzer": {
-      "command": "/path/to/your/project/.venv/bin/mcp",
+      "command": "/absolute/path/to/project/.venv/bin/mcp",
       "args": ["run", "server.py"]
     }
   }
 }
 ```
 
-## Как использовать
+> **Note**: Replace `/absolute/path/to/project/` with the actual path to your project directory.
 
-В чате с LLM (в Cherry Studio, Claude и др.) просто напишите:
-> "Проанализируй отзывы этого товара: [SKU или ссылка]"
-> "Какие плюсы и минусы у товара [SKU]?"
+## Usage
 
-Клиент сам вызовет инструмент `get_wb_reviews`, получит тексты отзывов и проведет анализ своими силами (используя свою модель).
+Once connected, you can ask your LLM to analyze products directly in the chat.
 
+**Example Prompts:**
+- "Analyze the reviews for this product: [SKU or URL]"
+- "What are the pros and cons of item 12345678?"
+- "Summarize the customer feedback for this link: https://www.wildberries.ru/catalog/..."
+
+The client will automatically call the `get_wb_reviews` tool and use the returned data to answer your request.
+
+## Tools
+
+| Tool | Description |
+|------|-------------|
+| `get_wb_reviews` | Retrieves product reviews from Wildberries by URL or SKU. Returns JSON with reviews and product info. |
+
+## License
+
+[MIT](LICENSE)
