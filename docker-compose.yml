@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  wb-analyzer-mcp:
+    build: .
+    image: wb-analyzer-mcp:latest
+    container_name: wb-analyzer-mcp
+    command: mcp run server.py
+    environment:
+      - CHAT_GPT_API_KEY=${CHAT_GPT_API_KEY}
+    # For stdio communication, we often run interactively
+    stdin_open: true
+    tty: true
+    volumes:
+      - .:/app
