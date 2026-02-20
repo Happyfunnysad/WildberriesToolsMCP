@@ -2,7 +2,12 @@
 
 > MCP server for retrieving Wildberries product reviews, designed for seamless integration with LLM clients like Cherry Studio, Claude Desktop, and Cursor.
 
+<details>
+<summary>👀 Пример использования</summary>
+
 ![Example](example.png)
+
+</details>
 
 ## Features
 
