@@ -1,4 +1,4 @@
-# WB Smart Review — MCP Server
+# WildberriesToolsMCP
 
 > MCP server for retrieving Wildberries product reviews, designed for seamless integration with LLM clients like Cherry Studio, Claude Desktop, and Cursor.
 
