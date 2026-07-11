@@ -1,0 +1,48 @@
+services:
+  - type: web
+    name: wildberries-tools-mcp
+    runtime: docker
+    plan: free
+    autoDeployTrigger: checksPass
+    envVars:
+      - key: MCP_TRANSPORT
+        value: streamable-http
+      - key: MCP_HOST
+        value: 0.0.0.0
+      - key: MCP_PATH
+        value: /mcp
+      - key: MCP_STATELESS_HTTP
+        value: "true"
+      - key: MCP_TRUST_PROXY
+        value: "true"
+
+      - key: XRAY_ENABLED
+        value: "true"
+      - key: OUTBOUND_PROXY
+        value: socks5://127.0.0.1:1080
+      - key: XRAY_SOCKS_PORT
+        value: "1080"
+      - key: XRAY_TEST_SOCKS_PORT
+        value: "1081"
+      - key: XRAY_SUBSCRIPTION_URL
+        value: https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/main/BLACK_VLESS_RUS_mobile.txt
+      - key: XRAY_VALIDATION_URL
+        value: https://www.wildberries.ru/
+      - key: XRAY_VALIDATE_STATUS_MAX
+        value: "399"
+      - key: XRAY_MAX_CANDIDATES
+        value: "15"
+      - key: XRAY_PROBE_TIMEOUT
+        value: "12"
+      - key: XRAY_FEED_REFRESH_INTERVAL
+        value: "7200"
+      - key: XRAY_ROTATE_INTERVAL
+        value: "900"
+      - key: XRAY_HEALTH_INTERVAL
+        value: "60"
+      - key: XRAY_HEALTH_FAILURES
+        value: "2"
+      - key: XRAY_STARTUP_TIMEOUT
+        value: "180"
+      - key: XRAY_IP_CHECK_URL
+        value: https://api.ipify.org
