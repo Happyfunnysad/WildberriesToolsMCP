@@ -32,7 +32,9 @@ def main() -> int:
     python = sys.executable
     server_cmd = [python, "/app/server.py"]
 
-    if not env_bool("XRAY_ENABLED", default=True):
+    # Plain Docker images remain usable without a public VPN dependency.
+    # Deployment configs explicitly opt in with XRAY_ENABLED=true.
+    if not env_bool("XRAY_ENABLED", default=False):
         os.execv(python, server_cmd)
         return 0
 
