@@ -1,15 +1,17 @@
-version: '3.8'
-
 services:
   wb-analyzer-mcp:
     build: .
     image: wb-analyzer-mcp:latest
     container_name: wb-analyzer-mcp
-    command: mcp run server.py
+    restart: unless-stopped
     environment:
-      - CHAT_GPT_API_KEY=${CHAT_GPT_API_KEY}
-    # For stdio communication, we often run interactively
-    stdin_open: true
-    tty: true
-    volumes:
-      - .:/app
+      MCP_TRANSPORT: streamable-http
+      MCP_HOST: 0.0.0.0
+      MCP_PORT: 8000
+      MCP_PATH: /mcp
+      MCP_STATELESS_HTTP: "true"
+      # Set to false and configure MCP_ALLOWED_HOSTS for direct internet exposure.
+      # Keep true only behind a reverse proxy/tunnel that validates the Host header.
+      MCP_TRUST_PROXY: "true"
+    ports:
+      - "8000:8000"
