@@ -9,10 +9,15 @@ from __future__ import annotations
 
 import json
 import subprocess
+import sys
 import tempfile
 from pathlib import Path
 
-from proxy.rotator import parse_vless_uri
+REPO_ROOT = Path(__file__).resolve().parents[1]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from proxy.rotator import parse_vless_uri  # noqa: E402
 
 SAMPLES = {
     "reality-tcp": (
