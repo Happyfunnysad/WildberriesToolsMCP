@@ -12,7 +12,7 @@ permissions:
 jobs:
   smoke:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
 
     steps:
       - name: Checkout
@@ -28,15 +28,26 @@ jobs:
         run: python -m pip install --upgrade pip && pip install -r requirements.txt
 
       - name: Compile Python sources
-        run: python -m compileall -q server.py wb.py scripts/smoke_mcp.py
+        run: >-
+          python -m compileall -q
+          server.py wb.py proxy/rotator.py
+          scripts/supervisor.py scripts/smoke_mcp.py scripts/validate_xray_configs.py
 
       - name: Build Docker image
         run: docker build -t wildberries-tools-mcp:ci .
 
-      - name: Start MCP container
+      - name: Validate generated VLESS configs with bundled Xray core
+        run: >-
+          docker run --rm
+          --entrypoint python
+          wildberries-tools-mcp:ci
+          scripts/validate_xray_configs.py
+
+      - name: Start MCP container without public VLESS dependency
         run: |
           docker run -d \
             --name wildberries-tools-mcp-ci \
+            -e XRAY_ENABLED=false \
             -e MCP_TRANSPORT=streamable-http \
             -e MCP_HOST=0.0.0.0 \
             -e MCP_PORT=8000 \
