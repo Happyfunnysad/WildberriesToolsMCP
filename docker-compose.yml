@@ -1,6 +1,9 @@
 services:
   wb-analyzer-mcp:
-    build: .
+    build:
+      context: .
+      args:
+        XRAY_VERSION: "26.3.27"
     image: wb-analyzer-mcp:latest
     container_name: wb-analyzer-mcp
     restart: unless-stopped
@@ -10,8 +13,32 @@ services:
       MCP_PORT: 8000
       MCP_PATH: /mcp
       MCP_STATELESS_HTTP: "true"
-      # Set to false and configure MCP_ALLOWED_HOSTS for direct internet exposure.
       # Keep true only behind a reverse proxy/tunnel that validates the Host header.
       MCP_TRUST_PROXY: "true"
+
+      # Route only Wildberries outbound requests through the local Xray SOCKS listener.
+      XRAY_ENABLED: "true"
+      OUTBOUND_PROXY: socks5://127.0.0.1:1080
+      XRAY_SOCKS_PORT: 1080
+      XRAY_TEST_SOCKS_PORT: 1081
+
+      # Auto-updated public VLESS subscription. Override this with your own trusted feed if needed.
+      XRAY_SUBSCRIPTION_URL: https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/main/BLACK_VLESS_RUS_mobile.txt
+
+      # A candidate must pass Xray syntax validation and a live WB HTTP probe before activation.
+      XRAY_VALIDATION_URL: https://www.wildberries.ru/
+      XRAY_VALIDATE_STATUS_MAX: 399
+      XRAY_MAX_CANDIDATES: 15
+      XRAY_PROBE_TIMEOUT: 12
+
+      # Refresh the source every 2h, rotate the active exit every 15m, and health-check every 60s.
+      XRAY_FEED_REFRESH_INTERVAL: 7200
+      XRAY_ROTATE_INTERVAL: 900
+      XRAY_HEALTH_INTERVAL: 60
+      XRAY_HEALTH_FAILURES: 2
+      XRAY_STARTUP_TIMEOUT: 180
+
+      # Optional: log the current public egress IP after activation.
+      XRAY_IP_CHECK_URL: https://api.ipify.org
     ports:
       - "8000:8000"
